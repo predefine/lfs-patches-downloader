@@ -1,0 +1,5 @@
+#Vscode settings
+.vscode
+
+# Patches output dir
+out
