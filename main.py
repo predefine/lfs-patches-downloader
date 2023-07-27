@@ -1,8 +1,13 @@
 """LFS Patches Downloader"""
 import os
 import urllib.request
+import shutil
 
-import requests
+try:
+    import httpx as requests
+except ImportError:
+    import requests
+
 from bs4 import BeautifulSoup
 
 files = []
@@ -12,11 +17,9 @@ def download_recursive(url: str, out_dir: str, download_after=True):
     """Download recursive"""
     if not out_dir.endswith("/"):
         out_dir += "/"
-    try:
-        os.listdir(out_dir)
-    except FileNotFoundError:
-        os.makedirs(out_dir)
 
+    if not url.endswith("/"):
+        url += "/"
     data = requests.get(url, timeout=25)
 
     if data.status_code != 200:
@@ -37,10 +40,20 @@ def download_recursive(url: str, out_dir: str, download_after=True):
         total_files = len(files)
         print(f"Count of files: {total_files}")
         for index, data in enumerate(files):
+            folder = os.path.dirname(data[1])
+            try:
+                os.listdir(folder)
+            except FileNotFoundError:
+                os.makedirs(folder)
             print(
                 f"{index+1}/{total_files} | Downloading {data[0]} to {data[1]}"
             )
             urllib.request.urlretrieve(*data)
 
+
+try:
+    shutil.rmtree("out")
+except FileNotFoundError:
+    pass
 
 download_recursive("https://linuxfromscratch.org/patches/downloads/", "out")
