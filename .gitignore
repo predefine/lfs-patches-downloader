@@ -3,3 +3,7 @@
 
 # Patches output dir
 out
+out-blfs-stable
+
+# python3 cache
+__pycache__
