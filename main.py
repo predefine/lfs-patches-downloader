@@ -1,4 +1,4 @@
-"""LFS Patches Downloader"""
+"""BLFS & LFS Patches Downloader"""
 from functions import remove_directory, download_recursive
 
 OUT_DIR = "out"
